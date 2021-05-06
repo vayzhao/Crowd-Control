@@ -46,7 +46,6 @@ public class OVRScreenFade : MonoBehaviour
 	private MeshFilter fadeMesh;
 	private Material fadeMaterial = null;
 	private bool isFading = false;
-	public Material ifHas;
 
 	/// <summary>
 	/// Automatically starts a fade in
@@ -60,7 +59,7 @@ public class OVRScreenFade : MonoBehaviour
 		}
 
 		// create the fade material
-		fadeMaterial = !ifHas ? ifHas : new Material(Shader.Find("Oculus/Unlit Transparent Color"));
+		fadeMaterial = new Material(Shader.Find("Oculus/Unlit Transparent Color"));
 		fadeMesh = gameObject.AddComponent<MeshFilter>();
 		fadeRenderer = gameObject.AddComponent<MeshRenderer>();
 

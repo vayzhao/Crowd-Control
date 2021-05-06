@@ -14,10 +14,13 @@ public class Loading : MonoBehaviour
 
     [Header("Player's components")]
     public Camera playerCamera;
-    public GameObject teleportation;
     public LayerMask initalCulling;
     public LayerMask finalCulling;
     private float farClipPlane;
+
+    [Header("Core Mechanic")]
+    public GameObject gameManager;
+    public GameObject uiHelper;
 
     // Start is called before the first frame update
     void Start()
@@ -69,9 +72,11 @@ public class Loading : MonoBehaviour
         // reset player camera's far clip plane
         playerCamera.farClipPlane = farClipPlane;
 
-        // enable player to move and teleport
-        teleportation.SetActive(true);
-        teleportation.GetComponentInParent<SimpleCapsuleWithStickMovement>().enabled = true;
+        // enable player use ui helper
+        uiHelper.SetActive(true);
+
+        // startup game manager
+        gameManager.SetActive(true);
 
         // remove the canvas and its object
         Destroy(loadingCanvas.gameObject, 3f);

@@ -218,7 +218,10 @@
     <Compile Include="Assets\Oculus\Spatializer\scripts\OculusSpatializerUnity.cs" />
     <Compile Include="Assets\Oculus\Spatializer\scripts\helpers\ONSPReflectionZone.cs" />
     <Compile Include="Assets\Scripts\Audio\AudioPlayer.cs" />
+    <Compile Include="Assets\Scripts\Patron\Patron.cs" />
+    <Compile Include="Assets\Scripts\System\GameController.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons.cs" />
+    <Compile Include="Assets\Scripts\UI\DecisionBtn.cs" />
     <Compile Include="Assets\Scripts\UI\Loading.cs" />
     <Compile Include="Assets\Scripts\UI\Settings.cs" />
     <Compile Include="Assets\Scripts\UI\VolumeSlider.cs" />
