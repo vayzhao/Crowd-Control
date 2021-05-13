@@ -89,6 +89,10 @@
     <Compile Include="Assets\Oculus\Spatializer\editor\ONSPPropagationMaterialEditor.cs" />
     <Compile Include="Assets\Oculus\Spatializer\editor\ONSPPropagationSerializationManager.cs" />
     <Compile Include="Assets\Oculus\Spatializer\editor\ONSPReflectionCustomGUI.cs" />
+    <Compile Include="Assets\ToonPeople\scripts\editor\EditorFemalePrefabMaker.cs" />
+    <Compile Include="Assets\ToonPeople\scripts\editor\EditorFemaleVRAvatarPrefabMaker.cs" />
+    <Compile Include="Assets\ToonPeople\scripts\editor\EditorMalePrefabMaker.cs" />
+    <Compile Include="Assets\ToonPeople\scripts\editor\EditorMaleVRAvatarPrefabMaker.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.20f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

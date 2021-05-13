@@ -20,6 +20,7 @@ public class Loading : MonoBehaviour
 
     [Header("Core Mechanic")]
     public GameObject gameManager;
+    public GameObject inGameCanvas;
     public GameObject uiHelper;
 
     // Start is called before the first frame update
@@ -53,7 +54,6 @@ public class Loading : MonoBehaviour
         Destroy(loadTitle.gameObject);
         Destroy(loadSlider.gameObject);
         
-        
         // start fading the background image 
         Color col = loadingBackground[0].color;
         bool gameStarted = false;
@@ -75,8 +75,9 @@ public class Loading : MonoBehaviour
         // enable player use ui helper
         uiHelper.SetActive(true);
 
-        // startup game manager
+        // startup game manager and in game canvas
         gameManager.SetActive(true);
+        inGameCanvas.SetActive(true);
 
         // remove the canvas and its object
         Destroy(loadingCanvas.gameObject, 3f);
