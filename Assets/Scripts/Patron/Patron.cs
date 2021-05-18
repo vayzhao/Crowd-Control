@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class Patron : MonoBehaviour
 {
     private Animator animator;
@@ -25,6 +27,9 @@ public class Patron : MonoBehaviour
         isInQueue = true;
         movementSpeed = spawner.movementSpeed;
         rotationSpeed = spawner.rotationSpeed;
+
+        // setup patron's DOB, name and suburb
+        GetComponent<PatronInformation>().Setup();
 
         // start moving towards the player
         ChooseAPath(spawner.spawnPath);
@@ -92,6 +97,11 @@ public class Patron : MonoBehaviour
             
             // display decision button objects
             spawner.stageManager.DisplayDecisionComponents(true);
+
+            // refresh licence data
+            spawner.stageManager.licenceObject.
+                GetComponent<Licence>().
+                Refresh(this.GetComponent<PatronInformation>());
         }
         else
         {

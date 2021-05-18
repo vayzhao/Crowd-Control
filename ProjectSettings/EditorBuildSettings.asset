@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/HomePage.unity
     guid: a20237e9cf94cca42a65045d8d4d3041
   - enabled: 1
-    path: Assets/Scenes/InGame_Backup.unity
-    guid: 784deb4ed16671b44ae4f9c6e8041df4
+    path: Assets/Scenes/InGame_WuWorkingOn.unity
+    guid: e28a385fe19bcab439c99ae3b35fd5e9
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 85e2487af8fc49949aa956ba67209095,
       type: 2}

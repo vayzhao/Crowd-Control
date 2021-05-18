@@ -5,9 +5,14 @@ using UnityEngine;
 public class Const : MonoBehaviour
 {
     // current game time
-    public static int year = 2021;
+    public static int year = 21;
     public static int month = 5;
     public static int day = 14;
+
+    // controller that pressing decision buttons
+    public static Controller leftController;
+    public static Controller rightController;
+    public static Controller pressingController;
 
     // patron number increase by n per night
     public const int WAVE_QUANTITY_INCREASE = 1;

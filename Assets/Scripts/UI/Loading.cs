@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Loading : MonoBehaviour
 {
+    [Header("Load Setting")]
+    public bool showLoading;
+
     [Header("UI Components")]
     public Text loadText;
     public Slider loadSlider;
@@ -21,25 +24,40 @@ public class Loading : MonoBehaviour
     [Header("Core Mechanic")]
     public GameObject gameManager;
     public GameObject inGameCanvas;
-    public GameObject uiHelper;
+    //public GameObject uiHelper;
 
     // Start is called before the first frame update
     void Start()
     {
-        // start to load
-        StartCoroutine("Load");
+        // check to see if showing loading
+        if (showLoading)
+        {
+            // activate loading canvas
+            loadingCanvas.SetActive(true);
 
-        // hide everything except UI components
-        farClipPlane = playerCamera.farClipPlane;
-        playerCamera.cullingMask = initalCulling;
-        playerCamera.farClipPlane = 2000f;
+            // start to load
+            StartCoroutine("Load");
+
+            // hide everything except UI components
+            farClipPlane = playerCamera.farClipPlane;
+            playerCamera.cullingMask = initalCulling;
+            playerCamera.farClipPlane = 2000f;
+        }
+        else
+        {
+            // destroy loading UI components
+            Destroy(loadingCanvas);
+
+            // start the game
+            GameStart();
+        }        
     }
 
     /// <summary>
     /// Method to load the scene
     /// </summary>
     /// <returns></returns>
-    private IEnumerator Load()
+    IEnumerator Load()
     {
         // start to load the progress bar
         while (loadSlider.value < 1f)
@@ -72,14 +90,24 @@ public class Loading : MonoBehaviour
         // reset player camera's far clip plane
         playerCamera.farClipPlane = farClipPlane;
 
-        // enable player use ui helper
-        uiHelper.SetActive(true);
-
-        // startup game manager and in game canvas
-        gameManager.SetActive(true);
-        inGameCanvas.SetActive(true);
-
         // remove the canvas and its object
         Destroy(loadingCanvas.gameObject, 3f);
+
+        // start the game
+        GameStart();
+    }
+
+    /// <summary>
+    /// Method to start up core game script after
+    /// loading is done
+    /// </summary>
+    void GameStart()
+    {
+        // enable playet to use ui helper
+        // uiHelper.SetActive(true);
+
+        // start up game manager and in game canvas
+        gameManager.SetActive(true);
+        inGameCanvas.SetActive(true);
     }
 }

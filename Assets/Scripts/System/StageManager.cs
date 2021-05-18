@@ -42,6 +42,9 @@ public class StageManager : MonoBehaviour
     public GameObject endGameVictory;
     [Tooltip("Things to display when the player loses")]
     public GameObject endGameGameover;
+    [Tooltip("A confirm button that allows the player" +
+        " to go back to home screen")]
+    public GameObject confirmButton;
 
     [Header("Sound Effect")]
     [Tooltip("An empty game object that has all sfx to play")]
@@ -63,6 +66,7 @@ public class StageManager : MonoBehaviour
     private PatronInformation patronInfo;
     private Vector3 licencePosOrigin;
     private Vector3 licenceEulOrigin;
+    private OVRGrabbable licenceGrabbable;
 
     // Start is called before the first frame update
     void Start()
@@ -72,6 +76,9 @@ public class StageManager : MonoBehaviour
 
         // find the rule manager script
         ruleManager = this.GetComponent<RuleManager>();
+
+        // find licence grabbable script
+        licenceGrabbable = licenceObject.GetComponent<OVRGrabbable>();
 
         // record licence original position and rotation
         licencePosOrigin = licenceObject.transform.position;
@@ -167,7 +174,8 @@ public class StageManager : MonoBehaviour
         // comparing current income and current goal
         var isWinning = currentIncome >= currentGoal;
 
-        // show the end game UI
+        // show the end game UI and confirm button
+        confirmButton.SetActive(true);        
         endGameHolder.SetActive(true);
 
         // if it is winning 
@@ -192,22 +200,38 @@ public class StageManager : MonoBehaviour
     /// <param name="isOn"></param>
     public void DisplayDecisionComponents(bool isOn)
     {
-        // display / hide the button objects and licence
-        decisionBtns.SetActive(isOn);
-        licenceObject.SetActive(isOn);
-
         // if it is displaying, reset information on licence object
         if (isOn)
         {
+            // reset licence's grabbable
+            licenceGrabbable.enabled = true;
+
             // reset licence's position and rotation
             licenceObject.transform.position = licencePosOrigin;
             licenceObject.transform.eulerAngles = licenceEulOrigin;
         }
-        // if it is hiding, then get the next spawning ready
+        // otherwise...
         else
         {
+            // set next spawning to be ready
             readyToSpawn = true;
+
+            // let go the licence object            
+            licenceGrabbable.grabbedBy?.ForceRelease(licenceGrabbable);
+            licenceGrabbable.enabled = false;
+
+            // reset licence's position and rotation
+            licenceObject.transform.position = licencePosOrigin;
+            licenceObject.transform.eulerAngles = licenceEulOrigin;
+
+            // reset decision buttons
+            foreach (var button in decisionBtns.GetComponentsInChildren<PhysicalButton>())
+                button.ResetButton();
         }
+
+        // display / hide the button objects and licence
+        decisionBtns.SetActive(isOn);
+        licenceObject.SetActive(isOn);
     }
 
     /// <summary>
@@ -269,6 +293,10 @@ public class StageManager : MonoBehaviour
 
         // hide the decision buttons and licence
         DisplayDecisionComponents(false);
+
+        // vibrate the controllers when making a wrong decision
+        if (!correctness)
+            Const.pressingController.AddVibration(1f, 1f, 0.5f);
     }
 
     /// <summary>

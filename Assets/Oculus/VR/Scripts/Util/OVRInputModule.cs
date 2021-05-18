@@ -26,7 +26,13 @@ namespace UnityEngine.EventSystems
         public OVRCursor m_Cursor;
 
         [Tooltip("Gamepad button to act as gaze click")]
-        public OVRInput.Button joyPadClickButton = OVRInput.Button.One;
+        //public OVRInput.Button joyPadClickButton = OVRInput.Button.One;
+        public OVRInput.Button[] joyPadClickButtons = new OVRInput.Button[3]
+        {
+            OVRInput.Button.One,
+            OVRInput.Button.PrimaryIndexTrigger,
+            OVRInput.Button.SecondaryIndexTrigger
+        };
 
         [Tooltip("Keyboard button to act as gaze click")]
         public KeyCode gazeClickKey = KeyCode.Space;
@@ -849,8 +855,8 @@ namespace UnityEngine.EventSystems
         /// <returns></returns>
         virtual protected PointerEventData.FramePressState GetGazeButtonState()
         {
-            var pressed = Input.GetKeyDown(gazeClickKey) || OVRInput.GetDown(joyPadClickButton);
-            var released = Input.GetKeyUp(gazeClickKey) || OVRInput.GetUp(joyPadClickButton);
+            var pressed = Input.GetKeyDown(gazeClickKey) || checkOVRInput(true); // OVRInput.GetDown(joyPadClickButton);
+            var released = Input.GetKeyUp(gazeClickKey) || checkOVRInput(false); // OVRInput.GetUp(joyPadClickButton);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             pressed |= Input.GetMouseButtonDown(0);
@@ -865,6 +871,22 @@ namespace UnityEngine.EventSystems
                 return PointerEventData.FramePressState.Released;
             return PointerEventData.FramePressState.NotChanged;
         }
+        bool checkOVRInput(bool isGettingDown)
+        {
+            for (int i = 0; i < joyPadClickButtons.Length; i++)
+            {
+                if (isGettingDown && OVRInput.GetDown(joyPadClickButtons[i]))
+                {
+                    return true;
+                }
+                else if (!isGettingDown && OVRInput.GetDown(joyPadClickButtons[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// Get extra scroll delta from gamepad
