@@ -1927,12 +1927,17 @@ MonoBehaviour:
   myAge: 26
   hairColor: 3
   hatColor: 00000000
-  shirtColor: 0b00000006000000
-  pantColor: 05000000
+  shirtColor: 0b000000
+  dressColor: 00000000
+  pantColor: 0b000000
   shoesColor: 05000000
   shoelaceColor: 9
-  hasWatch: 0
+  hasTie: 0
   hasGlasses: 0
+  myDOB: 
+  mySurname: 
+  myFirstname: 
+  mySuburb: 0
 --- !u!1 &6888453563093223581
 GameObject:
   m_ObjectHideFlags: 0

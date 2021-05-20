@@ -144,9 +144,15 @@ public class PhysicalButton : MonoBehaviour
     /// Method to reset the button to its original position
     /// and pressing status to be fause
     /// </summary>
-    public void ResetButton()
+    public void ResetButton(bool isHiding)
     {
         isPressed = false;
         transform.position = originPos;
+
+        // hide the button if necessary
+        if (isHiding)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

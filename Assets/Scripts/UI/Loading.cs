@@ -24,7 +24,6 @@ public class Loading : MonoBehaviour
     [Header("Core Mechanic")]
     public GameObject gameManager;
     public GameObject inGameCanvas;
-    //public GameObject uiHelper;
 
     // Start is called before the first frame update
     void Start()
@@ -103,8 +102,8 @@ public class Loading : MonoBehaviour
     /// </summary>
     void GameStart()
     {
-        // enable playet to use ui helper
-        // uiHelper.SetActive(true);
+        // set up date data
+        Const.SetupDate();
 
         // start up game manager and in game canvas
         gameManager.SetActive(true);

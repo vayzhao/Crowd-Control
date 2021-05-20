@@ -2332,9 +2332,14 @@ MonoBehaviour:
   myAge: 38
   hairColor: 11
   hatColor: 00000000
-  shirtColor: 0500000001000000
+  shirtColor: 05000000
+  dressColor: 00000000
   pantColor: 0b000000
   shoesColor: 040000000a000000
   shoelaceColor: 8
-  hasWatch: 0
+  hasTie: 0
   hasGlasses: 0
+  myDOB: 
+  mySurname: 
+  myFirstname: 
+  mySuburb: 0

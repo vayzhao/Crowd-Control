@@ -11,7 +11,7 @@ public class StageManager : MonoBehaviour
     [Tooltip("Initial income to start with")]
     public int initialIncome = 30;
     [Tooltip("Inital income goal aiming to acheive")]
-    public int initialGoal = 45;
+    public int initialGoal = 40;
     [Tooltip("Score to gain when making a right decision")]
     public int reward = 2;
     [Tooltip("Score to lose when making a mistake")]
@@ -19,14 +19,9 @@ public class StageManager : MonoBehaviour
     [Tooltip("Text to display current income")]
     public TextMeshProUGUI txCurrentIncome;
     [Tooltip("Text to display current income goal")]
-    public TextMeshProUGUI txCurrentIncomeGoal;
+    public TextMeshProUGUI txCurrentIncomeGoal;    
 
     [Header("Spawning")]
-    [Tooltip("The number of spawning patrons")]
-    public int spawnQty = 10;    
-    [Tooltip("Text to display the remaining number " +
-        "of patrons you will need to deal with")]
-    public TextMeshProUGUI txRemaining;
     [Tooltip("An empty game object that holds decision buttons")]
     public GameObject decisionBtns;
 
@@ -35,33 +30,29 @@ public class StageManager : MonoBehaviour
     public GameObject licenceObject;
 
     [Header("End Game UI")]
-    [Tooltip("An empty gameobject that holds all the end game" +
-        " ui components")]
-    public GameObject endGameHolder;
     [Tooltip("Things to display when the player wins")]
     public GameObject endGameVictory;
     [Tooltip("Things to display when the player loses")]
     public GameObject endGameGameover;
-    [Tooltip("A confirm button that allows the player" +
-        " to go back to home screen")]
-    public GameObject confirmButton;
+    [Tooltip("A button that allows the player to enter next night")]
+    public PhysicalButton nextButton;
+    [Tooltip("A button that allows the player to restart the game")]
+    public PhysicalButton restartButton;
+    [Tooltip("A button that allows the player to exit the game")]
+    public PhysicalButton quitButton;
 
     [Header("Sound Effect")]
     [Tooltip("An empty game object that has all sfx to play")]
     public SoundEffect sfxManager;
 
-
-
-
-
-
     private PatronSpawner spawner;    
-    private int remainingSpawn;
     [HideInInspector]
     public bool readyToSpawn;
+    private int stage;
     private int currentIncome;
     private int currentGoal;
     private RuleManager ruleManager;
+    private NightSetting nightSetting;
     private Patron currentPatron;
     private PatronInformation patronInfo;
     private Vector3 licencePosOrigin;
@@ -71,11 +62,17 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // initial stage
+        stage = 1;
+
         // find the patron spawning script
         spawner = this.GetComponent<PatronSpawner>();
 
         // find the rule manager script
-        ruleManager = this.GetComponent<RuleManager>();
+        ruleManager = transform.parent.GetComponentInChildren<RuleManager>();
+
+        // find night setting script
+        nightSetting = this.GetComponent<NightSetting>();
 
         // find licence grabbable script
         licenceGrabbable = licenceObject.GetComponent<OVRGrabbable>();
@@ -84,23 +81,11 @@ public class StageManager : MonoBehaviour
         licencePosOrigin = licenceObject.transform.position;
         licenceEulOrigin = licenceObject.transform.eulerAngles;
 
-        // reset spawn remaining
-        ResetRemaining();
-
         // reset income goal
         ResetIncomeGoal();
 
-        // initialize UI
-        InitializeUI();
-    }
-
-    /// <summary>
-    /// Reset spawn remaining when a new night starts
-    /// </summary>
-    void ResetRemaining()
-    {
+        // set ready to spawn to be true
         readyToSpawn = true;
-        remainingSpawn = spawnQty;
     }
 
     /// <summary>
@@ -108,19 +93,13 @@ public class StageManager : MonoBehaviour
     /// </summary>
     void ResetIncomeGoal()
     {
+        // reset income and goal to initial values
         currentIncome = initialIncome;
         currentGoal = initialGoal;
-    }
 
-    /// <summary>
-    /// Method to intialize UI texts everytime when
-    /// a new night starts
-    /// </summary>
-    void InitializeUI()
-    {
+        // update text components
         txCurrentIncome.text = currentIncome.ToString();
         txCurrentIncomeGoal.text = currentGoal.ToString();
-        txRemaining.text = remainingSpawn + " left";
     }
 
     // Update is called once per frame
@@ -140,27 +119,18 @@ public class StageManager : MonoBehaviour
         // check to see if it is ready to spawn 
         if (readyToSpawn)
         {
-            // check to see if there is more patron to spawn
-            if (remainingSpawn > 0)
+            // show up result when the player has enough score to win
+            // or when the timer has finished
+            if (!nightSetting.isRunning || currentIncome >= currentGoal) 
             {
-                // decrease remaining spawning number
-                remainingSpawn--;
-
-                // update ui text
-                txRemaining.text = (remainingSpawn + 1) + " left";
-
-                // spawn a patron and record its script
-                currentPatron = spawner.Spawn();
-                patronInfo = currentPatron.gameObject.GetComponent<PatronInformation>();
+                readyToSpawn = false;
+                Invoke("CheckWinLose", 2f);
             }
-            // if not, call it a day
+            // othwesie, spawn a patron
             else
             {
-                // update ui text
-                txRemaining.text = "Completed";
-
-                // determine whether is winning or losing
-                CheckWinLose();
+                currentPatron = spawner.Spawn();
+                patronInfo = currentPatron.GetComponent<PatronInformation>();
             }
         }
     }
@@ -174,13 +144,12 @@ public class StageManager : MonoBehaviour
         // comparing current income and current goal
         var isWinning = currentIncome >= currentGoal;
 
-        // show the end game UI and confirm button
-        confirmButton.SetActive(true);        
-        endGameHolder.SetActive(true);
-
         // if it is winning 
         if (isWinning)
         {
+            // show the winner option
+            nextButton.gameObject.SetActive(true);
+            
             // display ui elements and play sfx
             endGameVictory.SetActive(true);
             sfxManager.Play(sfxManager.victorySfx);
@@ -188,6 +157,10 @@ public class StageManager : MonoBehaviour
         }
         else
         {
+            // show the loser options
+            restartButton.gameObject.SetActive(true);
+            quitButton.gameObject.SetActive(true);
+
             // display ui elements
             endGameGameover.SetActive(true);
             sfxManager.Play(sfxManager.gameoverSfx);
@@ -226,7 +199,7 @@ public class StageManager : MonoBehaviour
 
             // reset decision buttons
             foreach (var button in decisionBtns.GetComponentsInChildren<PhysicalButton>())
-                button.ResetButton();
+                button.ResetButton(false);
         }
 
         // display / hide the button objects and licence
@@ -297,6 +270,59 @@ public class StageManager : MonoBehaviour
         // vibrate the controllers when making a wrong decision
         if (!correctness)
             Const.pressingController.AddVibration(1f, 1f, 0.5f);
+    }
+    
+    /// <summary>
+    /// Method to move onto the next stage
+    /// </summary>
+    public void Next()
+    {
+        // hide option buttons
+        nextButton.ResetButton(true);
+        endGameVictory.SetActive(false);
+
+        // reset current income and goal
+        currentIncome = currentGoal;
+        currentGoal += 10;
+
+        // update text components
+        txCurrentIncome.text = currentIncome.ToString();
+        txCurrentIncomeGoal.text = currentGoal.ToString();
+
+        // move to next day
+        nightSetting.StartANewNight(stage);
+
+        // increase stage
+        stage++;
+
+        // refresh rules 
+        ruleManager.UpdateRuleBoards();
+
+        // set ready to spawn to be true
+        readyToSpawn = true;
+    }
+
+    /// <summary>
+    /// Method to restart the game
+    /// </summary>
+    public void Restart()
+    {
+        // hide option buttons
+        restartButton.ResetButton(true);
+        quitButton.ResetButton(true);
+        endGameGameover.SetActive(false);
+
+        // reset income
+        ResetIncomeGoal();
+
+        // reset night
+        nightSetting.ResetNight();
+
+        // refresh rules 
+        ruleManager.UpdateRuleBoards();
+
+        // set ready to spawn to be true
+        readyToSpawn = true;
     }
 
     /// <summary>

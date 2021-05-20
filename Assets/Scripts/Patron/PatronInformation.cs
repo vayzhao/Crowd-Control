@@ -160,12 +160,18 @@ public class PatronInformation : Info
     public Colors[] hatColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's shirt")]
     public Colors[] shirtColor = new Colors[1] { Colors.None };
+    [Tooltip("Color for the patron's dress")]
+    public Colors[] dressColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's pant")]
     public Colors[] pantColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's shoes")]
     public Colors[] shoesColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's shoelaces")]
     public Colors shoelaceColor;
+
+    [Header("Other")]
+    public bool hasTie;
+    public bool hasGlasses;
 
     /// <summary>
     /// Information for the patron
@@ -189,6 +195,8 @@ public class PatronInformation : Info
         mySurname = GenerateSurname();
         myFirstname = GenerateFirstname(gender);
         mySuburb = (Suburb)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Suburb)).Length);
+
+        PrintData();
     }
 
     /// <summary>
@@ -226,6 +234,15 @@ public class PatronInformation : Info
         // return the result
         return day.ToString("00") + "/" 
             + ((Month)month - 1).ToString() + "/"
-            + (year + 2000);
+            + (year);
+    }
+
+    /// <summary>
+    /// Method to print patron's data into console window,
+    /// it is used for debuging purpose
+    /// </summary>
+    void PrintData()
+    {
+        Debug.Log(string.Format("MyAge:{0} MySuburb:{1}", myAge, mySuburb));
     }
 }

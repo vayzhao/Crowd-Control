@@ -228,6 +228,8 @@
     <Compile Include="Assets\Scripts\Patron\PatronSpawner.cs" />
     <Compile Include="Assets\Scripts\System\Const.cs" />
     <Compile Include="Assets\Scripts\System\Controller.cs" />
+    <Compile Include="Assets\Scripts\System\KeyboardInput.cs" />
+    <Compile Include="Assets\Scripts\System\NightSetting.cs" />
     <Compile Include="Assets\Scripts\System\RuleManager.cs" />
     <Compile Include="Assets\Scripts\System\StageManager.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons.cs" />

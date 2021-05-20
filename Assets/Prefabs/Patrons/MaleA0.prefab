@@ -1597,11 +1597,16 @@ MonoBehaviour:
   hairColor: 10
   hatColor: 00000000
   shirtColor: 0b000000
+  dressColor: 00000000
   pantColor: 05000000
   shoesColor: 04000000
   shoelaceColor: 8
-  hasWatch: 0
+  hasTie: 1
   hasGlasses: 0
+  myDOB: 
+  mySurname: 
+  myFirstname: 
+  mySuburb: 0
 --- !u!1 &5745117576032146350
 GameObject:
   m_ObjectHideFlags: 0

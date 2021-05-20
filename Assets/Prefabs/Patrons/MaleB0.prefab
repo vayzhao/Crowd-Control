@@ -1078,12 +1078,17 @@ MonoBehaviour:
   myAge: 29
   hairColor: 0
   hatColor: 0b000000
-  shirtColor: 0b00000007000000
+  shirtColor: 07000000
+  dressColor: 00000000
   pantColor: 07000000
   shoesColor: 04000000
   shoelaceColor: 9
-  hasWatch: 0
+  hasTie: 0
   hasGlasses: 0
+  myDOB: 
+  mySurname: 
+  myFirstname: 
+  mySuburb: 0
 --- !u!1 &3507327485413735237
 GameObject:
   m_ObjectHideFlags: 0

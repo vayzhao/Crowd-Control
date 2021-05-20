@@ -1712,14 +1712,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gender: 1
   myAge: 28
-  hairColor: 10
+  hairColor: 11
   hatColor: 0a000000
   shirtColor: 04000000
+  dressColor: 00000000
   pantColor: 05000000
   shoesColor: 09000000
   shoelaceColor: 0
-  hasWatch: 0
+  hasTie: 0
   hasGlasses: 0
+  myDOB: 
+  mySurname: 
+  myFirstname: 
+  mySuburb: 0
 --- !u!1 &6100752806584773916
 GameObject:
   m_ObjectHideFlags: 0
