@@ -119,6 +119,7 @@ public class Licence : MonoBehaviour
 
         // instantiate a new patron model 
         patronModel = Instantiate(info.gameObject, patronModelHolder);
+        patronModel.transform.localScale = Vector3.one;
         patronModel.transform.localPosition = Vector3.zero;
         patronModel.transform.localEulerAngles = Vector3.zero;
 

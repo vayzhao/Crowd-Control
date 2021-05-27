@@ -9,6 +9,7 @@ public class Const : MonoBehaviour
     public static int year;
     public static int month;
     public static int day;
+    public static string dateString;
 
     // controller that pressing decision buttons
     public static Controller leftController;
@@ -29,6 +30,7 @@ public class Const : MonoBehaviour
     {
         // get current date
         var current = DateTime.Now;
+        dateString = current.ToString("dd/MM/yy");
 
         // store date data into year, month and day
         year = current.Year;
@@ -39,6 +41,7 @@ public class Const : MonoBehaviour
     {
         // increase current date by adding n day
         var nextDay = DateTime.Now.AddDays(n);
+        dateString = nextDay.ToString("dd/MM/yy");
 
         // store date data into year, month and day
         year = nextDay.Year;

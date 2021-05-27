@@ -16,10 +16,8 @@ public class PatronSpawner : MonoBehaviour
     public GameObject[] patronPrefabs;
 
     [Header("Spawn Setting")]
-    [Tooltip("Position where the patrons are spawned")]
-    public Transform spawnLocation;
     [Tooltip("An empty gameobject that holds the patrons")]
-    public Transform patronHolder;
+    public Transform patronHolder;    
 
     [Header("Pathing")]
     [Tooltip("Path from spawn point to player")]
@@ -27,9 +25,7 @@ public class PatronSpawner : MonoBehaviour
     [Tooltip("Path to enter the club")]
     public Transform[] enterPath;
     [Tooltip("Path to leave the club")]
-    public Transform[] exitPathA;
-    [Tooltip("Path to leave the club")]
-    public Transform[] exitPathB;
+    public Transform[] exitPath;
 
     /// <summary>
     /// Necessary variables for patron spawning
@@ -86,14 +82,20 @@ public class PatronSpawner : MonoBehaviour
         // get spawning index
         var index = PopIndex();
 
+        // genurate spawn path
+        var path = spawnPath[Random.Range(0, spawnPath.Length)];
+        var startNode = path.GetChild(0);
+        var nextNode = startNode.GetChild(0);
+        var rotation = startNode.position - nextNode.position;
+
         // instantiate the game object
         var patron = Instantiate(patronPrefabs[index], patronHolder);
-        patron.transform.position = spawnLocation.position;
-        patron.transform.eulerAngles = new Vector3(0f, 300f, 0f);
-
+        patron.transform.position = startNode.position; 
+        patron.transform.eulerAngles = rotation;
+        
         // patrong setup
         var script = patron.AddComponent<Patron>();
-        script.Setup(this);
+        script.Setup(this, path);
 
         // disable spawning
         stageManager.readyToSpawn = false;

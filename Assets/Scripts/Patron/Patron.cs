@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+public enum PatronFSM
+{
+    Spawn,
+    Enter,
+    Exit,
+    Wait,
+    Dance
+}
 
 public class Patron : MonoBehaviour
 {
     private Animator animator;
     private PatronSpawner spawner;
-    private Transform[] path;
-    private int currentPathIndex;
     private float movementSpeed;
     private float rotationSpeed;
-    private bool isInQueue;
+
+    public PatronFSM fsm;
+    private Transform currentNode;
 
     // Method to setup a patron 
-    public void Setup(PatronSpawner spawner)
+    public void Setup(PatronSpawner spawner, Transform path)
     {
         // bind the spawning script to this object
         this.spawner = spawner;
@@ -24,7 +31,7 @@ public class Patron : MonoBehaviour
         animator = GetComponent<Animator>();
 
         // initialize variables
-        isInQueue = true;
+        fsm = PatronFSM.Spawn;
         movementSpeed = spawner.movementSpeed;
         rotationSpeed = spawner.rotationSpeed;
 
@@ -32,22 +39,20 @@ public class Patron : MonoBehaviour
         GetComponent<PatronInformation>().Setup();
 
         // start moving towards the player
-        ChooseAPath(spawner.spawnPath);
+        ChooseAPath(path);
     }
 
     /// <summary>
-    /// Method for a patron to choose a path 
-    /// and start moving towards it
+    /// Method for finding the start node of given 
+    /// path, reset walking coroutine and animation
     /// </summary>
-    /// <param name="chosenPath"></param>
-    void ChooseAPath(Transform[] chosenPath)
+    void ChooseAPath(Transform path)
     {
         // stop the current walking coroutine
         StopCoroutine(Walking());
 
-        // reset path and path index
-        path = chosenPath;
-        currentPathIndex = 0;
+        // find the start node of the path
+        currentNode = path.GetChild(0);
 
         // start a new walking coroutine
         StartCoroutine(Walking());
@@ -55,6 +60,7 @@ public class Patron : MonoBehaviour
         // play walking animation
         animator.Play("Walk");
     }
+
 
     /// <summary>
     /// Method for patrons to walk to a destination. If the 
@@ -68,46 +74,90 @@ public class Patron : MonoBehaviour
     IEnumerator Walking()
     {
         // keep walking when there is more node to go
-        while (currentPathIndex < path.Length)
+        while (currentNode)
         {
+            // find current node's position
+            var dest = currentNode.position;
+
+            // rotate the patron
+            var rot = Quaternion.LookRotation(dest - transform.position);
+            var fix = Mathf.Min(rotationSpeed * Time.deltaTime, 1f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rot, fix);
+
             // moving patron's position
             transform.position = Vector3.MoveTowards(transform.position,
-                path[currentPathIndex].position, movementSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(
-                path[currentPathIndex].position - transform.position), 
-                Mathf.Min(rotationSpeed * Time.deltaTime, 1f));
+                dest, movementSpeed * Time.deltaTime);
 
-            // check to see if the patron reaches the turning node
-            if (Vector3.Distance(transform.position, path[currentPathIndex].position) <= Const.DISTANCE_REACH)
+            // check to see if the patron has reached the destination
+            if (Vector3.Distance(transform.position, dest) <= Const.DISTANCE_REACH) 
             {
-                currentPathIndex++;
+                // check to see if the next node exists
+                if (currentNode.childCount > 0)
+                    currentNode = currentNode.GetChild(0);
+                else
+                    break;
             }
 
             // yielding
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        // check to see if the patron is in queue
-        if (isInQueue)
+        // check to see what the patron is doing
+        switch (fsm)
         {
-            // if it is, set it to be false and resume
-            // idle animation
-            isInQueue = false;
-            animator.Play("Idle");
-            
-            // display decision button objects
-            spawner.stageManager.DisplayDecisionComponents(true);
+            case PatronFSM.Spawn:
+                Wait();
+                break;
+            case PatronFSM.Enter:
+                Dance();
+                break;
+            case PatronFSM.Exit:
+                Destroy(this.gameObject);
+                break;
+            default:
+                break;
+        }
+    }
 
-            // refresh licence data
-            spawner.stageManager.licenceObject.
-                GetComponent<Licence>().
-                Refresh(this.GetComponent<PatronInformation>());
-        }
-        else
-        {
-            // otherwise destroy the object
-            Destroy(this.gameObject);
-        }
+    /// <summary>
+    /// Patron FSM Behaviour - Wait
+    /// In this fsm, patorn is waiting for the player to 
+    /// decide whether to accept or reject
+    /// </summary>
+    public void Wait()
+    {
+        // switch fsm to wait
+        fsm = PatronFSM.Wait;
+
+        // reset animation
+        animator.Play("Idle");
+
+        // force the patron to look at the player
+        transform.eulerAngles = Vector3.up * 90f;
+
+        // display decision button objects
+        spawner.stageManager.DisplayDecisionComponents(true);
+
+        // refresh licence data
+        spawner.stageManager.licenceObject.GetComponent<Licence>().Refresh(this.GetComponent<PatronInformation>());
+    }
+
+    /// <summary>
+    /// Patron FSM Behaviour - Dance
+    /// In this fsm, patron will enter the dance fsm,
+    /// It is called when the patron reaches the last
+    /// node of enter path
+    /// </summary>
+    public void Dance()
+    {
+        // switch fsm to dance
+        fsm = PatronFSM.Dance;
+
+        // reset animation
+        animator.Play("Jump");
+
+        // into the dance floor
+        spawner.stageManager.danceFloor.AddPatron(this.transform);
     }
 
     /// <summary>
@@ -115,8 +165,11 @@ public class Patron : MonoBehaviour
     /// </summary>
     public void Accept()
     {
-        // choose the path
-        ChooseAPath(spawner.enterPath);
+        // switch fsm to enter
+        fsm = PatronFSM.Enter;
+
+        // choose an entering path
+        ChooseAPath(spawner.enterPath[Random.Range(0, spawner.enterPath.Length)]);
     }
 
     /// <summary>
@@ -124,10 +177,10 @@ public class Patron : MonoBehaviour
     /// </summary>
     public void Reject()
     {
-        // choose the path 
-        if (Random.Range(0f,1f) > 0.5f)
-            ChooseAPath(spawner.exitPathA);
-        else
-            ChooseAPath(spawner.exitPathB);
+        // switch fsm to exit
+        fsm = PatronFSM.Exit;
+
+        // choose an exiting path
+        ChooseAPath(spawner.exitPath[Random.Range(0, spawner.exitPath.Length)]);
     }
 }

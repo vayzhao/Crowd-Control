@@ -17,13 +17,13 @@ public class StageManager : MonoBehaviour
     [Tooltip("Score to lose when making a mistake")]
     public int penalty = -2;
     [Tooltip("Text to display current income")]
-    public TextMeshProUGUI txCurrentIncome;
-    [Tooltip("Text to display current income goal")]
-    public TextMeshProUGUI txCurrentIncomeGoal;    
+    public TextMeshProUGUI txIncome;
 
     [Header("Spawning")]
     [Tooltip("An empty game object that holds decision buttons")]
     public GameObject decisionBtns;
+    [Tooltip("A object that holds dancing patron")]
+    public DanceFloor danceFloor;
 
     [Header("Licence")]
     [Tooltip("Gameobject that represents patron's licence")]
@@ -34,12 +34,16 @@ public class StageManager : MonoBehaviour
     public GameObject endGameVictory;
     [Tooltip("Things to display when the player loses")]
     public GameObject endGameGameover;
+    [Tooltip("Things to display InCome & Date")]
+    public GameObject inGameUIHolder;
+    [Tooltip("Computing Text")]
+    public TextMeshProUGUI computingText;
     [Tooltip("A button that allows the player to enter next night")]
-    public PhysicalButton nextButton;
+    public GameObject nextButton;
     [Tooltip("A button that allows the player to restart the game")]
-    public PhysicalButton restartButton;
+    public GameObject restartButton;
     [Tooltip("A button that allows the player to exit the game")]
-    public PhysicalButton quitButton;
+    public GameObject quitButton;
 
     [Header("Sound Effect")]
     [Tooltip("An empty game object that has all sfx to play")]
@@ -98,8 +102,7 @@ public class StageManager : MonoBehaviour
         currentGoal = initialGoal;
 
         // update text components
-        txCurrentIncome.text = currentIncome.ToString();
-        txCurrentIncomeGoal.text = currentGoal.ToString();
+        txIncome.text = string.Format("Misson\n{0}/{1}", currentIncome, currentGoal);
     }
 
     // Update is called once per frame
@@ -123,8 +126,15 @@ public class StageManager : MonoBehaviour
             // or when the timer has finished
             if (!nightSetting.isRunning || currentIncome >= currentGoal) 
             {
+                // disable spawn
                 readyToSpawn = false;
-                Invoke("CheckWinLose", 2f);
+
+                // hide in game ui components
+                inGameUIHolder.SetActive(false);
+
+                // computing
+                computingText.gameObject.SetActive(true);
+                Invoke("CheckWinLose", 3f);
             }
             // othwesie, spawn a patron
             else
@@ -141,6 +151,9 @@ public class StageManager : MonoBehaviour
     /// </summary>
     void CheckWinLose()
     {
+        // hide computing text
+        computingText.gameObject.SetActive(false);
+
         // comparing current income and current goal
         var isWinning = currentIncome >= currentGoal;
 
@@ -148,7 +161,7 @@ public class StageManager : MonoBehaviour
         if (isWinning)
         {
             // show the winner option
-            nextButton.gameObject.SetActive(true);
+            nextButton.SetActive(true);
             
             // display ui elements and play sfx
             endGameVictory.SetActive(true);
@@ -158,8 +171,8 @@ public class StageManager : MonoBehaviour
         else
         {
             // show the loser options
-            restartButton.gameObject.SetActive(true);
-            quitButton.gameObject.SetActive(true);
+            restartButton.SetActive(true);
+            quitButton.SetActive(true);
 
             // display ui elements
             endGameGameover.SetActive(true);
@@ -218,7 +231,7 @@ public class StageManager : MonoBehaviour
         currentIncome = Mathf.Clamp(currentIncome + increment, 0, currentGoal);
 
         // refresh ui text
-        txCurrentIncome.text = currentIncome.ToString();
+        txIncome.text = string.Format("Misson\n{0}/{1}", currentIncome, currentGoal);
     }
 
     /// <summary>
@@ -277,8 +290,12 @@ public class StageManager : MonoBehaviour
     /// </summary>
     public void Next()
     {
+        // clean up dance floor
+        danceFloor.Clear();
+
         // hide option buttons
-        nextButton.ResetButton(true);
+        inGameUIHolder.SetActive(true);
+        nextButton.GetComponentInChildren<PhysicalButton>().ResetButton(true);
         endGameVictory.SetActive(false);
 
         // reset current income and goal
@@ -286,8 +303,7 @@ public class StageManager : MonoBehaviour
         currentGoal += 10;
 
         // update text components
-        txCurrentIncome.text = currentIncome.ToString();
-        txCurrentIncomeGoal.text = currentGoal.ToString();
+        txIncome.text = string.Format("Misson\n{0}/{1}", currentIncome, currentGoal);
 
         // move to next day
         nightSetting.StartANewNight(stage);
@@ -307,9 +323,13 @@ public class StageManager : MonoBehaviour
     /// </summary>
     public void Restart()
     {
+        // clean up dance floor
+        danceFloor.Clear();
+
         // hide option buttons
-        restartButton.ResetButton(true);
-        quitButton.ResetButton(true);
+        inGameUIHolder.SetActive(true);
+        restartButton.GetComponentInChildren<PhysicalButton>().ResetButton(true);
+        quitButton.GetComponentInChildren<PhysicalButton>().ResetButton(true);
         endGameGameover.SetActive(false);
 
         // reset income

@@ -18,7 +18,7 @@ public class KeyButton
             var spring = btn.GetComponent<PhysicalButton>().springForce;
 
             // key pressing down the button
-            btn.transform.position += Vector3.down * (spring * 2f) * Time.deltaTime;
+            btn.transform.localPosition += Vector3.down * (spring * 1.25f) * Time.deltaTime;
         }
     }
 }

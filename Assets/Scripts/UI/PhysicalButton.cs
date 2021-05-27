@@ -17,7 +17,7 @@ public class PhysicalButton : MonoBehaviour
 
     [Header("Spring")]
     [Tooltip("A position where will trigger button's function")]
-    public float pressLength = 0.3f;
+    public float pressLength = 0.08f;
     [Tooltip("How strong the spring will pop up the button" +
         " when it is not being pressed by the player")]
     public float springForce = 1f;
@@ -27,9 +27,8 @@ public class PhysicalButton : MonoBehaviour
     /// the button function
     /// </summary>
     private bool isPressed;
-    private float minHeight;
-    private float maxHeight;
     private Vector3 originPos;
+    private float triggerHeight;
     
     // Start is called before the first frame update
     void Start()
@@ -37,9 +36,8 @@ public class PhysicalButton : MonoBehaviour
         // save origin position
         originPos = transform.position;
 
-        // calculate min and max height
-        maxHeight = originPos.y;
-        minHeight = maxHeight - pressLength;
+        // calculate button's trigger height
+        triggerHeight = originPos.y - pressLength;
 
         // edit button's text
         GetComponentInChildren<TextMeshProUGUI>().text = buttonText;
@@ -75,21 +73,11 @@ public class PhysicalButton : MonoBehaviour
     /// </summary>
     void ButtonSpring()
     {
-        // get button current position
-        var pos = transform.position;
-
-        // if it is not being press, add 
-        // upward force to the button
+        // if it is not being pressed, reset its position
         if (!isPressed)
         {
-            pos.y += springForce * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, originPos, springForce * Time.deltaTime);
         }
-
-        // clamp the height
-        pos.y = Mathf.Clamp(pos.y, minHeight, maxHeight);
-
-        // update button's position
-        transform.position = pos;
     }
 
     /// <summary>
@@ -101,7 +89,7 @@ public class PhysicalButton : MonoBehaviour
     void ButtonTrigger()
     {
         // check button's current height
-        if (transform.position.y <= minHeight)
+        if (transform.position.y <= triggerHeight)
         {
             // save the pressing controller
             SavePressingController();
@@ -139,7 +127,7 @@ public class PhysicalButton : MonoBehaviour
         Const.pressingController = lDis <= rDis ? 
             Const.leftController : Const.rightController;
     }
-
+    
     /// <summary>
     /// Method to reset the button to its original position
     /// and pressing status to be fause
@@ -152,7 +140,7 @@ public class PhysicalButton : MonoBehaviour
         // hide the button if necessary
         if (isHiding)
         {
-            gameObject.SetActive(false);
+            transform.parent.gameObject.SetActive(false);
         }
     }
 }

@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+
+[Serializable]
+public class SkySet
+{
+    public Material skyBoxMat;
+    public Color skyColor;
+}
 
 public class NightSetting : MonoBehaviour
 {
@@ -18,19 +26,30 @@ public class NightSetting : MonoBehaviour
     [Tooltip("How many second per night lasts")]
     public int perNightLast = 60;
 
+    [Header("Skyboxes")]
+    [Tooltip("Sky Boxes Prefabs")]
+    public SkySet[] skySets;
+    private List<int> skySetIndex;
+
     [HideInInspector]
     public bool isRunning;
 
     // Start is called before the first frame update
     void Start()
     {
+        skySetIndex = new List<int>();
+
         InitializeSlider();
-        ResetTimer();        
+        ResetTimer();
+        ResetSkyIndex();
+
+        ChangeSky();
     }
 
     // Update is called once per frame
     void Update()
     {
+        RotateSkyBox();
         ReducingTimer();
     }
 
@@ -44,16 +63,53 @@ public class NightSetting : MonoBehaviour
     }
 
     /// <summary>
+    /// Method to reset sky index
+    /// </summary>
+    void ResetSkyIndex()
+    {
+        skySetIndex.Clear();
+        for (int i = 0; i < skySets.Length; i++)
+            skySetIndex.Add(i);
+    }
+
+    /// <summary>
+    /// Method to update the sky
+    /// </summary>
+    void ChangeSky()
+    {
+        // reset the list if the list is empty
+        if (skySetIndex.Count == 0)
+            ResetSkyIndex();
+
+        // get a random index
+        var index = skySetIndex[UnityEngine.Random.Range(0, skySetIndex.Count)];
+
+        // remove this index from the list
+        skySetIndex.Remove(index);
+
+        // Update Render Settings
+        RenderSettings.skybox = skySets[index].skyBoxMat;
+        RenderSettings.ambientSkyColor = skySets[index].skyColor;
+    }
+
+    /// <summary>
     /// Method to reset timer slider and calendar
     /// </summary>
     void ResetTimer()
     {
         timerSlider.value = timerSlider.maxValue;
-        txCalender.text = Const.day.ToString("00") + "/" + 
-            Const.month.ToString("00") + "/" + Const.year;
+        txCalender.text = Const.dateString;
         isRunning = true;
     }
-    
+
+    /// <summary>
+    /// Method to rotate the skybox material
+    /// </summary>
+    void RotateSkyBox()
+    {
+        RenderSettings.skybox.SetFloat("_Rotation", Time.time);
+    }
+
     /// <summary>
     /// Method to run the timer every frame
     /// </summary>
@@ -78,6 +134,7 @@ public class NightSetting : MonoBehaviour
     {
         Const.SetupDate();
         ResetTimer();
+        ChangeSky();
         txStage.text = "Stage 1";
     }
 
@@ -87,6 +144,7 @@ public class NightSetting : MonoBehaviour
     public void StartANewNight(int n)
     {
         Const.NextDay(n);
+        ChangeSky();
         ResetTimer();
         txStage.text = string.Format("Stage {0}", n+1);
     }
