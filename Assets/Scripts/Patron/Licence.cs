@@ -125,7 +125,9 @@ public class Licence : MonoBehaviour
 
         // remove animation controller from 
         // the patron model
-        Destroy(patronModel.GetComponent<Animator>());
+        var animator = patronModel.GetComponent<Animator>();
+        animator.Play("Idle");
+        animator.speed = 0;
     }
 
     /// <summary>

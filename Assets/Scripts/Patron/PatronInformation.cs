@@ -37,18 +37,14 @@ public enum Month
 public enum Colors
 {
     None,
-    Red,
-    Orange,
-    Yellow,
-    Green,
-    Blue,
-    Cyan,
-    Purple,
-    White,
     Black,
+    Blue,
     Brown,
-    Gray,
-    Pink
+    Green,
+    Purple,
+    Red,
+    White,
+    Yellow
 }
 
 [Serializable]
@@ -156,8 +152,6 @@ public class PatronInformation : Info
     [Header("Colors")]
     [Tooltip("Color for the patron's hair")]
     public Colors hairColor;
-    [Tooltip("Color for the patron's hat")]
-    public Colors[] hatColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's shirt")]
     public Colors[] shirtColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's dress")]
@@ -166,11 +160,10 @@ public class PatronInformation : Info
     public Colors[] pantColor = new Colors[1] { Colors.None };
     [Tooltip("Color for the patron's shoes")]
     public Colors[] shoesColor = new Colors[1] { Colors.None };
-    [Tooltip("Color for the patron's shoelaces")]
-    public Colors shoelaceColor;
 
     [Header("Other")]
     public bool hasTie;
+    public bool hasHat;
     public bool hasGlasses;
 
     /// <summary>
@@ -196,7 +189,7 @@ public class PatronInformation : Info
         myFirstname = GenerateFirstname(gender);
         mySuburb = (Suburb)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Suburb)).Length);
 
-        PrintData();
+        //PrintData();
     }
 
     /// <summary>

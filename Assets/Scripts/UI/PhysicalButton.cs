@@ -78,6 +78,13 @@ public class PhysicalButton : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, originPos, springForce * Time.deltaTime);
         }
+
+        // force to reset the button position when the player
+        // is trying to pull up the button
+        if (transform.position.y > originPos.y)
+        {
+            transform.position = originPos;
+        }
     }
 
     /// <summary>

@@ -9,7 +9,13 @@ public class Settings : MonoBehaviour
 
     public Slider musicSlider;
     public Slider effectSlider;
-    
+    public Slider environmentSlider;
+
+    void Start()
+    {
+        ResetSettings();
+    }
+
     /// <summary>
     /// Reset everything to default
     /// </summary>
@@ -17,6 +23,7 @@ public class Settings : MonoBehaviour
     {
         musicSlider.value = AudioPlayer.DEFAULT_VOL_MUSIC;
         effectSlider.value = AudioPlayer.DEFAULT_VOL_EFFECT;
+        environmentSlider.value = AudioPlayer.DEFAULT_VOL_ENVIRONMENT;
     }
 
     /// <summary>
@@ -26,7 +33,8 @@ public class Settings : MonoBehaviour
     {
         // check if anything has been changed
         if (musicSlider.value != AudioPlayer.musicVolume
-            || effectSlider.value != AudioPlayer.effectVolume)
+            || effectSlider.value != AudioPlayer.effectVolume
+            || environmentSlider.value != AudioPlayer.environmentVolume)
         {
             unsavedChangePanel.SetActive(true);
         }
@@ -43,6 +51,7 @@ public class Settings : MonoBehaviour
     {
         AudioPlayer.musicVolume = musicSlider.value;
         AudioPlayer.effectVolume = effectSlider.value;
+        AudioPlayer.environmentVolume = environmentSlider.value;
 
         unsavedChangePanel.SetActive(false);
         this.GetComponent<Buttons>().Close();
@@ -55,6 +64,7 @@ public class Settings : MonoBehaviour
     {
         musicSlider.value = AudioPlayer.musicVolume;
         effectSlider.value = AudioPlayer.effectVolume;
+        environmentSlider.value = AudioPlayer.environmentVolume;
 
         unsavedChangePanel.SetActive(false);
         this.GetComponent<Buttons>().Close();

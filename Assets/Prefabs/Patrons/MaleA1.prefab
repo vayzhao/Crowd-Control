@@ -2098,9 +2098,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2510613385034740981}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 2}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 2510613384028873423}
   - {fileID: 2510613385246872825}
@@ -2122,7 +2122,7 @@ Animator:
   m_GameObject: {fileID: 2510613385034740981}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9e5ed165caa63904386d01e822d592d7, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7a71745dd1dde1949a28352c7f489ea7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 98bf301d2cdfdbf4a9e9a9e0d6707984, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2145,14 +2145,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gender: 0
   myAge: 60
-  hairColor: 11
-  hatColor: 0b000000
+  hairColor: 0
   shirtColor: 04000000
   dressColor: 00000000
-  pantColor: 05000000
+  pantColor: 02000000
   shoesColor: 04000000
-  shoelaceColor: 10
   hasTie: 0
+  hasHat: 1
   hasGlasses: 0
   myDOB: 
   mySurname: 

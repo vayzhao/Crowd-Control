@@ -437,9 +437,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3408935429242336391}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 2}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 3408935430395435894}
   - {fileID: 3408935430534792378}
@@ -485,14 +485,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gender: 0
   myAge: 35
-  hairColor: 11
-  hatColor: 00000000
+  hairColor: 1
   shirtColor: 04000000
   dressColor: 00000000
-  pantColor: 01000000
+  pantColor: 06000000
   shoesColor: 04000000
-  shoelaceColor: 9
   hasTie: 1
+  hasHat: 0
   hasGlasses: 0
   myDOB: 
   mySurname: 

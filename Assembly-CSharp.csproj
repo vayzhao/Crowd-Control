@@ -223,6 +223,7 @@
     <Compile Include="Assets\Scripts\Audio\UISound.cs" />
     <Compile Include="Assets\Scripts\Audio\VolumeSlider.cs" />
     <Compile Include="Assets\Scripts\Patron\DanceFloor.cs" />
+    <Compile Include="Assets\Scripts\Patron\DoodadPatron.cs" />
     <Compile Include="Assets\Scripts\Patron\Licence.cs" />
     <Compile Include="Assets\Scripts\Patron\Patron.cs" />
     <Compile Include="Assets\Scripts\Patron\PatronInformation.cs" />

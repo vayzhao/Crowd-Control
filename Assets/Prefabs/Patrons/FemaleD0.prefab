@@ -1350,7 +1350,7 @@ Transform:
   m_GameObject: {fileID: 4969224329925536483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 8600894587788890003}
   - {fileID: 5848112817735874287}
@@ -1394,14 +1394,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gender: 1
   myAge: 36
-  hairColor: 10
-  hatColor: 00000000
+  hairColor: 6
   shirtColor: 00000000
-  dressColor: 01000000
+  dressColor: 06000000
   pantColor: 00000000
-  shoesColor: 05000000
-  shoelaceColor: 8
+  shoesColor: 02000000
   hasTie: 0
+  hasHat: 0
   hasGlasses: 1
   myDOB: 
   mySurname: 

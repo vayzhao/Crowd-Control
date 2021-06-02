@@ -9,12 +9,10 @@ using TMPro;
 public enum AvatarPart
 {
     Hair,
-    Hat,
     Shirt,
     Dress,
     Pant,
-    Shoe,
-    Shoelace
+    Shoe
 }
 
 [Serializable]
@@ -27,7 +25,8 @@ public enum AgeCondition
 public enum Condition
 {
     hasTie,
-    hasGlasses
+    hasGlasses,
+    hasHat
 }
 
 [Serializable]
@@ -313,8 +312,6 @@ public class RuleManager : MonoBehaviour
         {
             case AvatarPart.Hair:
                 return info.hairColor != ban;
-            case AvatarPart.Hat:
-                return !IsContained(info.hatColor, ban);
             case AvatarPart.Shirt:
                 return !IsContained(info.shirtColor, ban);
             case AvatarPart.Dress:
@@ -323,8 +320,6 @@ public class RuleManager : MonoBehaviour
                 return !IsContained(info.pantColor, ban);
             case AvatarPart.Shoe:
                 return !IsContained(info.shoesColor, ban);
-            case AvatarPart.Shoelace:
-                return info.shoelaceColor != ban;
             default:
                 return true;
         }
@@ -371,6 +366,8 @@ public class RuleManager : MonoBehaviour
                 return !info.hasTie;
             case Condition.hasGlasses:
                 return !info.hasGlasses;
+            case Condition.hasHat:
+                return !info.hasHat;
             default:
                 return true;
         }

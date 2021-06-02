@@ -48,6 +48,8 @@ public class StageManager : MonoBehaviour
     [Header("Sound Effect")]
     [Tooltip("An empty game object that has all sfx to play")]
     public SoundEffect sfxManager;
+    [Tooltip("An empty game object that plays the environment bgm")]
+    public AudioPlayer audioPlayer;
 
     private PatronSpawner spawner;    
     [HideInInspector]
@@ -87,6 +89,9 @@ public class StageManager : MonoBehaviour
 
         // reset income goal
         ResetIncomeGoal();
+
+        // refresh environment bgm
+        audioPlayer.RefreshEnvironmentBGM();
 
         // set ready to spawn to be true
         readyToSpawn = true;
@@ -314,6 +319,9 @@ public class StageManager : MonoBehaviour
         // refresh rules 
         ruleManager.UpdateRuleBoards();
 
+        // refresh environment bgm
+        audioPlayer.RefreshEnvironmentBGM();
+
         // set ready to spawn to be true
         readyToSpawn = true;
     }
@@ -341,6 +349,9 @@ public class StageManager : MonoBehaviour
         // refresh rules 
         ruleManager.UpdateRuleBoards();
 
+        // refresh environment bgm
+        audioPlayer.RefreshEnvironmentBGM();
+
         // set ready to spawn to be true
         readyToSpawn = true;
     }
@@ -350,6 +361,6 @@ public class StageManager : MonoBehaviour
     /// </summary>
     public void ReturnToHome()
     {
-        SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+        SceneManager.LoadScene(0);
     }
 }

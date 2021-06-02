@@ -1148,13 +1148,12 @@ MonoBehaviour:
   gender: 1
   myAge: 50
   hairColor: 1
-  hatColor: 00000000
   shirtColor: 00000000
   dressColor: 01000000
   pantColor: 00000000
   shoesColor: 05000000
-  shoelaceColor: 8
   hasTie: 0
+  hasHat: 0
   hasGlasses: 1
   myDOB: 
   mySurname: 
@@ -1225,13 +1224,12 @@ MonoBehaviour:
   gender: 0
   myAge: 28
   hairColor: 9
-  hatColor: 00000000
   shirtColor: 0500000008000000
   dressColor: 00000000
   pantColor: 07000000
   shoesColor: 0b000000
-  shoelaceColor: 11
   hasTie: 0
+  hasHat: 0
   hasGlasses: 0
   myDOB: 
   mySurname: 
@@ -1258,13 +1256,12 @@ MonoBehaviour:
   gender: 0
   myAge: 35
   hairColor: 11
-  hatColor: 00000000
   shirtColor: 04000000
   dressColor: 00000000
   pantColor: 01000000
   shoesColor: 04000000
-  shoelaceColor: 9
   hasTie: 1
+  hasHat: 0
   hasGlasses: 0
   myDOB: 
   mySurname: 
@@ -1835,13 +1832,12 @@ MonoBehaviour:
   gender: 0
   myAge: 60
   hairColor: 11
-  hatColor: 0b000000
   shirtColor: 04000000
   dressColor: 00000000
   pantColor: 05000000
   shoesColor: 04000000
-  shoelaceColor: 10
   hasTie: 0
+  hasHat: 0
   hasGlasses: 0
   myDOB: 
   mySurname: 
@@ -1874,13 +1870,12 @@ MonoBehaviour:
   gender: 1
   myAge: 29
   hairColor: 2
-  hatColor: 00000000
   shirtColor: 05000000
   dressColor: 00000000
   pantColor: 08000000
   shoesColor: 01000000
-  shoelaceColor: 0
   hasTie: 1
+  hasHat: 0
   hasGlasses: 1
   myDOB: 
   mySurname: 
@@ -2915,13 +2910,12 @@ MonoBehaviour:
   gender: 1
   myAge: 27
   hairColor: 3
-  hatColor: 00000000
   shirtColor: 04000000
   dressColor: 00000000
   pantColor: 0b000000
   shoesColor: 0400000003000000
-  shoelaceColor: 8
   hasTie: 0
+  hasHat: 0
   hasGlasses: 0
   myDOB: 
   mySurname: 
@@ -4504,13 +4498,12 @@ MonoBehaviour:
   gender: 1
   myAge: 55
   hairColor: 11
-  hatColor: 00000000
   shirtColor: 05000000
   dressColor: 00000000
   pantColor: 0a000000
   shoesColor: 0300000008000000
-  shoelaceColor: 9
   hasTie: 0
+  hasHat: 0
   hasGlasses: 0
   myDOB: 
   mySurname: 
@@ -4537,13 +4530,12 @@ MonoBehaviour:
   gender: 0
   myAge: 40
   hairColor: 9
-  hatColor: 00000000
   shirtColor: 0b000000
   dressColor: 00000000
   pantColor: 05000000
   shoesColor: 0a000000
-  shoelaceColor: 10
   hasTie: 1
+  hasHat: 0
   hasGlasses: 1
   myDOB: 
   mySurname: 

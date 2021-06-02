@@ -63,7 +63,7 @@ public class Loading : MonoBehaviour
         {
             loadSlider.value += Time.deltaTime;
             loadText.text = (loadSlider.value * 100.05f).ToString("N0") + "%";
-            yield return new WaitForSeconds(Time.deltaTime * 10f);
+            yield return new WaitForSeconds(Time.deltaTime);
         }
 
         // when finish loading, remove these UI components

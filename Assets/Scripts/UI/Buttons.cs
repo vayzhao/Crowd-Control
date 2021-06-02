@@ -85,7 +85,7 @@ public class Buttons : MonoBehaviour
     /// </summary>
     public void StartNewGame()
     {
-        SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(1);
     }
 
     /// <summary>

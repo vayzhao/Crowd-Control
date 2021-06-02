@@ -5,7 +5,8 @@ using UnityEngine.Audio;
 
 public enum AudioType{
     Music,
-    Effect
+    Effect,
+    Environment
 }
 
 public class AudioPlayer : MonoBehaviour
@@ -13,16 +14,23 @@ public class AudioPlayer : MonoBehaviour
     const float VOLUME_MUTE = -80f;
     const float VOLUME_MIN = -10f;
     const float VOLUME_MAX = 10f;
-    public const float DEFAULT_VOL_MUSIC = 0.5f;
-    public const float DEFAULT_VOL_EFFECT = 0.5f;
+    public const float DEFAULT_VOL_MUSIC = 0.6f;
+    public const float DEFAULT_VOL_EFFECT = 0.35f;
+    public const float DEFAULT_VOL_ENVIRONMENT = 0.10f;
 
     public static float musicVolume;
     public static float effectVolume;
+    public static float environmentVolume;
 
+    [Header("Clip Files")]
     public AudioClip defaultBgm;
+    public AudioClip[] environmentBgms;
     public static AudioSource srcMusic;
     public static AudioSource srcEffect;
+    public static AudioSource srcEnvironment;
     public static AudioMixer audioMixer;
+
+    private List<int> environmentBgmIndexs;
 
     // Start is called before the first frame update
     void Start()
@@ -30,17 +38,49 @@ public class AudioPlayer : MonoBehaviour
         // get the audio source components from children
         srcMusic = this.transform.GetChild(0).GetComponent<AudioSource>();
         srcEffect = this.transform.GetChild(1).GetComponent<AudioSource>();
+        srcEnvironment = this.transform.GetChild(2).GetComponent<AudioSource>();
 
         // find the audio mixer and update volume
         audioMixer = srcMusic.outputAudioMixerGroup.audioMixer;
         musicVolume = DEFAULT_VOL_MUSIC;
         effectVolume = DEFAULT_VOL_EFFECT;
+        environmentVolume = DEFAULT_VOL_ENVIRONMENT;
         EditVolume(AudioType.Music, musicVolume);
         EditVolume(AudioType.Effect, effectVolume);
+        EditVolume(AudioType.Environment, environmentVolume);
+
+        // setup environment bgm index
+        environmentBgmIndexs = new List<int>();
+        ResetEnvironmentBgmIndex();
 
         // play the default background music
         PlayClip(AudioType.Music, defaultBgm);
     }
+
+    /// <summary>
+    /// Method to play environment bgm and refresh its
+    /// index list.
+    /// </summary>
+    public void RefreshEnvironmentBGM()
+    {
+        // reset environment index list if it is empty
+        if (environmentBgmIndexs.Count == 0)
+            ResetEnvironmentBgmIndex();
+
+        // pick a random index and remove it from the list
+        var index = Random.Range(0, environmentBgmIndexs.Count);
+        environmentBgmIndexs.Remove(index);
+
+        // play the clip
+        PlayClip(AudioType.Environment, environmentBgms[index]);
+    }
+    void ResetEnvironmentBgmIndex()
+    {
+        environmentBgmIndexs.Clear();
+        for (int i = 0; i < environmentBgms.Length; i++)
+            environmentBgmIndexs.Add(i);
+    }
+
 
     /// <summary>
     /// Method to play an audio clip
@@ -57,6 +97,10 @@ public class AudioPlayer : MonoBehaviour
                 break;
             case AudioType.Effect:
                 srcEffect.PlayOneShot(clip);
+                break;
+            case AudioType.Environment:
+                srcEnvironment.clip = clip;
+                srcEnvironment.Play();
                 break;
             default:
                 break;
@@ -80,6 +124,9 @@ public class AudioPlayer : MonoBehaviour
                 break;
             case AudioType.Effect:
                 audioMixer.SetFloat("Effect", value);
+                break;
+            case AudioType.Environment:
+                audioMixer.SetFloat("Environment", value);
                 break;
             default:
                 break;
