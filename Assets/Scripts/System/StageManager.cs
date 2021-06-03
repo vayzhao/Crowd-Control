@@ -125,7 +125,7 @@ public class StageManager : MonoBehaviour
     void CheckSpawning()
     {
         // check to see if it is ready to spawn 
-        if (readyToSpawn)
+        if (readyToSpawn && !Tutorial.tutorialHoldSpawn)
         {
             // show up result when the player has enough score to win
             // or when the timer has finished
@@ -331,6 +331,9 @@ public class StageManager : MonoBehaviour
     /// </summary>
     public void Restart()
     {
+        // reset stage to be 1
+        stage = 1;
+
         // clean up dance floor
         danceFloor.Clear();
 

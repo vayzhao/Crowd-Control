@@ -83,8 +83,9 @@ public class Buttons : MonoBehaviour
     /// <summary>
     /// Start a new game
     /// </summary>
-    public void StartNewGame()
+    public void StartNewGame(bool hasTutorial)
     {
+        Tutorial.isTutorialOn = hasTutorial;
         SceneManager.LoadScene(1);
     }
 

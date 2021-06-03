@@ -6,7 +6,8 @@ using UnityEngine.Audio;
 public enum AudioType{
     Music,
     Effect,
-    Environment
+    Environment,
+    Speech
 }
 
 public class AudioPlayer : MonoBehaviour
@@ -17,10 +18,12 @@ public class AudioPlayer : MonoBehaviour
     public const float DEFAULT_VOL_MUSIC = 0.6f;
     public const float DEFAULT_VOL_EFFECT = 0.35f;
     public const float DEFAULT_VOL_ENVIRONMENT = 0.10f;
+    public const float DEFAULT_VOL_SPEECH = 0.8f;
 
     public static float musicVolume;
     public static float effectVolume;
     public static float environmentVolume;
+    public static float speechVolume;
 
     [Header("Clip Files")]
     public AudioClip defaultBgm;
@@ -28,6 +31,7 @@ public class AudioPlayer : MonoBehaviour
     public static AudioSource srcMusic;
     public static AudioSource srcEffect;
     public static AudioSource srcEnvironment;
+    public static AudioSource srcSpeech;
     public static AudioMixer audioMixer;
 
     private List<int> environmentBgmIndexs;
@@ -39,15 +43,18 @@ public class AudioPlayer : MonoBehaviour
         srcMusic = this.transform.GetChild(0).GetComponent<AudioSource>();
         srcEffect = this.transform.GetChild(1).GetComponent<AudioSource>();
         srcEnvironment = this.transform.GetChild(2).GetComponent<AudioSource>();
+        srcSpeech = this.transform.GetChild(3).GetComponent<AudioSource>();
 
         // find the audio mixer and update volume
         audioMixer = srcMusic.outputAudioMixerGroup.audioMixer;
         musicVolume = DEFAULT_VOL_MUSIC;
         effectVolume = DEFAULT_VOL_EFFECT;
         environmentVolume = DEFAULT_VOL_ENVIRONMENT;
+        speechVolume = DEFAULT_VOL_SPEECH;
         EditVolume(AudioType.Music, musicVolume);
         EditVolume(AudioType.Effect, effectVolume);
         EditVolume(AudioType.Environment, environmentVolume);
+        EditVolume(AudioType.Speech, speechVolume);
 
         // setup environment bgm index
         environmentBgmIndexs = new List<int>();
@@ -102,6 +109,11 @@ public class AudioPlayer : MonoBehaviour
                 srcEnvironment.clip = clip;
                 srcEnvironment.Play();
                 break;
+            case AudioType.Speech:
+                srcSpeech.Stop();
+                srcSpeech.clip = clip;
+                srcSpeech.Play();
+                break;
             default:
                 break;
         }
@@ -127,6 +139,9 @@ public class AudioPlayer : MonoBehaviour
                 break;
             case AudioType.Environment:
                 audioMixer.SetFloat("Environment", value);
+                break;
+            case AudioType.Speech:
+                audioMixer.SetFloat("Speech", value);
                 break;
             default:
                 break;

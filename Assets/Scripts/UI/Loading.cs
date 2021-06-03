@@ -105,6 +105,10 @@ public class Loading : MonoBehaviour
         // set up date data
         Const.SetupDate();
 
+        // check to see if tutorial is on
+        if (Tutorial.isTutorialOn)
+            FindObjectOfType<Tutorial>().enabled = true;
+
         // start up game manager and in game canvas
         gameManager.SetActive(true);
         inGameCanvas.SetActive(true);
