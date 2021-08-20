@@ -115,7 +115,7 @@ public class NightSetting : MonoBehaviour
     /// </summary>
     void ReducingTimer()
     {
-        if (timerSlider.value>0)
+        if (timerSlider.value > 0 && !Tutorial.tutorialHoldSpawn) 
         {
             timerSlider.value -= Time.deltaTime;
 

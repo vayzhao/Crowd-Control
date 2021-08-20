@@ -172,7 +172,20 @@ public class RuleManager : MonoBehaviour
     void UpdateRuleBoardSingle(int ruleBoardIndex)
     {
         // pop up a random value from the remanining
-        var index = remainRules[UnityEngine.Random.Range(0, remainRules.Count)];
+        var index = 0; 
+        var duplicated = true;
+        while (duplicated)
+        {
+            duplicated = false;
+            index = remainRules[UnityEngine.Random.Range(0, remainRules.Count)];
+            
+            for (int i = 0; i < currentRules.Count; i++)
+                if (index == currentRules[i])
+                {
+                    duplicated = true;
+                    break;
+                }                    
+        }
 
         // remove the index from remaning and add it to current
         remainRules.Remove(index);
